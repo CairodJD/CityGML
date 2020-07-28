@@ -1,0 +1,36 @@
+<GMLFeatureClassList>
+  <GMLFeatureClass>
+    <Name>Building</Name>
+    <ElementPath>Building</ElementPath>
+    <!--POLYHEDRALSURFACEZ-->
+    <GeometryType>1015</GeometryType>
+    <SRSName>urn:ogc:def:crs,crs:EPSG::25832,crs:EPSG::5783</SRSName>
+    <DatasetSpecificInfo>
+      <FeatureCount>1</FeatureCount>
+      <ExtentXMin>458727.00000</ExtentXMin>
+      <ExtentXMax>458759.86006</ExtentXMax>
+      <ExtentYMin>5438310.23543</ExtentYMin>
+      <ExtentYMax>5438332.48889</ExtentYMax>
+    </DatasetSpecificInfo>
+    <PropertyDefn>
+      <Name>LocalityName</Name>
+      <ElementPath>address|Address|xalAddress|AddressDetails|Locality|LocalityName</ElementPath>
+      <Type>StringList</Type>
+    </PropertyDefn>
+    <PropertyDefn>
+      <Name>ThoroughfareNumber</Name>
+      <ElementPath>address|Address|xalAddress|AddressDetails|Locality|Thoroughfare|ThoroughfareNumber</ElementPath>
+      <Type>IntegerList</Type>
+    </PropertyDefn>
+    <PropertyDefn>
+      <Name>ThoroughfareName</Name>
+      <ElementPath>address|Address|xalAddress|AddressDetails|Locality|Thoroughfare|ThoroughfareName</ElementPath>
+      <Type>StringList</Type>
+    </PropertyDefn>
+    <PropertyDefn>
+      <Name>PostalCodeNumber</Name>
+      <ElementPath>address|Address|xalAddress|AddressDetails|Locality|PostalCode|PostalCodeNumber</ElementPath>
+      <Type>IntegerList</Type>
+    </PropertyDefn>
+  </GMLFeatureClass>
+</GMLFeatureClassList>

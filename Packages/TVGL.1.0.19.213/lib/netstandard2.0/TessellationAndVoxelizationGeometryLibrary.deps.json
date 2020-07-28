@@ -1,0 +1,88 @@
+{
+  "runtimeTarget": {
+    "name": ".NETStandard,Version=v2.0/",
+    "signature": "fb097d68b10772e0af063e8eabc05388313e4300"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETStandard,Version=v2.0": {},
+    ".NETStandard,Version=v2.0/": {
+      "TessellationAndVoxelizationGeometryLibrary/1.0.17.1019": {
+        "dependencies": {
+          "MIConvexHull": "1.1.17.1019",
+          "NETStandard.Library": "2.0.3",
+          "StarMath": "2.0.17.1019",
+          "System.ValueTuple": "4.5.0"
+        },
+        "runtime": {
+          "TessellationAndVoxelizationGeometryLibrary.dll": {}
+        }
+      },
+      "MIConvexHull/1.1.17.1019": {
+        "runtime": {
+          "lib/netstandard1.0/MIConvexHull.dll": {
+            "assemblyVersion": "1.0.17.1019",
+            "fileVersion": "1.0.17.1019"
+          }
+        }
+      },
+      "Microsoft.NETCore.Platforms/1.1.0": {},
+      "NETStandard.Library/2.0.3": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0"
+        }
+      },
+      "StarMath/2.0.17.1019": {
+        "runtime": {
+          "lib/netstandard1.0/StarMath.dll": {
+            "assemblyVersion": "1.0.17.725",
+            "fileVersion": "1.0.17.725"
+          }
+        }
+      },
+      "System.ValueTuple/4.5.0": {}
+    }
+  },
+  "libraries": {
+    "TessellationAndVoxelizationGeometryLibrary/1.0.17.1019": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MIConvexHull/1.1.17.1019": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uMqKPn/MXLZFGdPFZg09MI2M3u8FmmbAcAx8j1jr64bR5XTpXWnkzr6rauTrZYDjSYXh9SaXFWDMO/zQ1TC7CA==",
+      "path": "miconvexhull/1.1.17.1019",
+      "hashPath": "miconvexhull.1.1.17.1019.nupkg.sha512"
+    },
+    "Microsoft.NETCore.Platforms/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
+      "path": "microsoft.netcore.platforms/1.1.0",
+      "hashPath": "microsoft.netcore.platforms.1.1.0.nupkg.sha512"
+    },
+    "NETStandard.Library/2.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
+      "path": "netstandard.library/2.0.3",
+      "hashPath": "netstandard.library.2.0.3.nupkg.sha512"
+    },
+    "StarMath/2.0.17.1019": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yh9B09rBYRYo7a+9htzVtM/gpvJaL6UHMbzEu3/VNbjv4iJ5tivavjiDfojYUUKnYJcZTo3Ko9lf8LaLXxPMAw==",
+      "path": "starmath/2.0.17.1019",
+      "hashPath": "starmath.2.0.17.1019.nupkg.sha512"
+    },
+    "System.ValueTuple/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ==",
+      "path": "system.valuetuple/4.5.0",
+      "hashPath": "system.valuetuple.4.5.0.nupkg.sha512"
+    }
+  }
+}
