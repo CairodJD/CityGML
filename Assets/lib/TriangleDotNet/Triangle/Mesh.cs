@@ -16,7 +16,7 @@ namespace TriangleNet
     using TriangleNet.Meshing.Iterators;
     using TriangleNet.Tools;
     using TriangleNet.Topology;
-
+    using UnityEngine;
     /// <summary>
     /// Mesh data structure.
     /// </summary>
@@ -413,6 +413,7 @@ namespace TriangleNet
             this.invertices = points.Count;
             this.mesh_dim = 2;
             this.bounds = new Rectangle();
+            //Debug.Log(" transfer " + points.Count);
 
             if (this.invertices < 3)
             {

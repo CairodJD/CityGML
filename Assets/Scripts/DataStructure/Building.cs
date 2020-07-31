@@ -28,6 +28,25 @@ public class Building {
         return build;
     }
 
+    public MeshFilter[] buildOptiConvexHull(Transform parent) {
+        //GameObject build = new GameObject("building");
+        //build.isStatic = true;
+
+
+        MeshFilter[] filters = new MeshFilter[polys.Count];
+
+        for (int i = 0; i < polys.Count; i++) {
+            GameObject temp = polys[i].ConvexHullTest();
+            temp.transform.parent = parent;
+
+            filters[i] = temp.GetComponent<MeshFilter>();
+        }
+
+
+
+        return filters;
+    }
+
     public MeshFilter[] buildOptiMI(Transform parent) {
         //GameObject build = new GameObject("building");
         //build.isStatic = true;

@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 063cdb626f6962c47a904a27ec59da70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  file: Building_LOD1-EPSG25832
+  file: Building_LOD2-EPSG25832
   downScale: 2000
   Opti: 1
 --- !u!4 &1133874082
@@ -327,7 +327,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &2017135559
 MeshCollider:
   m_ObjectHideFlags: 0

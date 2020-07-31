@@ -17,6 +17,7 @@ public class GmlPolygon {
     new TriangleNet.Meshing.ConstraintOptions() { ConformingDelaunay = true };
 
 
+
     public Polygon polygon = new Polygon();
 
     public List<float> elevation = new List<float>();
@@ -27,7 +28,7 @@ public class GmlPolygon {
     public Color polyColor = Color.gray;
 
     public Poly2Mesh.Polygon ptmpolygon = new Poly2Mesh.Polygon();
-
+    public string name;
 
     public GmlPolygon(XElement poly) {
         // separer les valeurs dans un tab
@@ -40,8 +41,8 @@ public class GmlPolygon {
                Get<float>(coords[i + 1].Replace('.', ',')),
                 Get<float>(coords[i + 2].Replace('.', ',')))
                 );
-
-            polygon.Points.Add(new Vertex(
+            elevation.Add(Get<float>(coords[i + 2].Replace('.', ',')));
+            polygon.Points.Add(new TriangleNet.Geometry.Vertex(
                 Get<double>(coords[i].Replace('.', ',')),
                 Get<double>(coords[i + 1].Replace('.', ','))
                 )
@@ -111,9 +112,8 @@ public class GmlPolygon {
         return side;
     }
 
-   
 
-    public GameObject SideOpti() {
+    public GameObject ConvexHullTest() {
         GameObject side = new GameObject();
         side.isStatic = true;
         Mesh mesh = new Mesh();
@@ -122,18 +122,7 @@ public class GmlPolygon {
         int[] triangles = new int[Mathf.CeilToInt(points.Count / 2) * 6];
         //Linear ring
 
-        //fau trouver un truc qui marche avec les BUILDINGs
-        // CHERCHE COMMENT ON DRAW UN LINEAR RING
-        int tri = 0;
-        for (int i = 0; i < Mathf.CeilToInt(points.Count / 2); i += 3) {
-            triangles[tri] = i;
-            triangles[tri++] = i + 1;
-            triangles[tri++] = i + 2;
-            // oposite
-            triangles[tri++] = i;
-            triangles[tri++] = i + 2;
-            triangles[tri++] = i + 3;
-        }
+        triangles = ConvexHull.Generate(vertices);
 
 
         mesh.vertices = vertices;
@@ -149,6 +138,49 @@ public class GmlPolygon {
         return side;
     }
 
+    //Naive first implementation 
+    //we get a prety accurate representation but there a too many unwanted holes 
+    public GameObject SideOpti() {
+        GameObject side = new GameObject();
+        side.isStatic = true;
+        Mesh mesh = new Mesh();
+        Vector3[] vertices = points.ToArray();
+        // nombre de points divisé par 2 * 2 * 3
+        int[] triangles = new int[Mathf.CeilToInt(points.Count / 2) * 6];
+        //Linear ring
+
+        Debug.Log(points.Count);
+        //fau trouver un truc qui marche avec les BUILDINGs
+        // CHERCHE COMMENT ON DRAW UN LINEAR RING
+        int tri = 0;
+        for (int i = 0; i < Mathf.CeilToInt(points.Count / 2); i += 3) {
+            triangles[tri] = i;
+            triangles[tri++] = i + 1;
+            triangles[tri++] = i + 2;
+            // oposite
+            triangles[tri++] = i;
+            triangles[tri++] = i + 2;
+            triangles[tri++] = i + 3;
+        }
+
+
+   
+
+        mesh.vertices = vertices;
+        //mesh.triangles = triangles;
+        mesh.triangles = triangles;
+        //mesh.RecalculateBounds();
+        //mesh.RecalculateNormals();
+
+        MeshFilter mshFilter = side.AddComponent<MeshFilter>();
+        side.AddComponent<MeshRenderer>().material.color = polyColor;
+        mshFilter.mesh = mesh;
+
+        return side;
+    }
+
+    //Regulare 2d delauney triangulation but we rotate 2d points to get the z axis
+    //Kinda works but with test data large scale data no ??
     public GameObject polyToMesh() {
         ptmpolygon.outside = points;
         GameObject side = new GameObject();
@@ -162,6 +194,7 @@ public class GmlPolygon {
         return side;
     }
 
+    //Convexhull issnt the approache to use
     public GameObject MiConvexHull() {
         GameObject side = new GameObject();
         side.isStatic = true;
@@ -199,8 +232,12 @@ public class GmlPolygon {
         return side;
     }
 
+
+    //Voronoir meshses with "elevation" to get z axis
     // constuire un mesh avec les points trianguler de l'algo + " l'evalation " en z
     // le point z doit etre to local
+    // on garde ca
+    //http://www.cs.cmu.edu/~quake/triangle.html
     public GameObject MeshFromTusais(Vector3 reference) {
         GameObject side = new GameObject();
         side.isStatic = true;
@@ -209,9 +246,10 @@ public class GmlPolygon {
         // nombre de points divisé par 2 * 2 * 3
         List<int> triangles = new List<int>();
         //Linear ring
-        
+        //Debug.Log("tu sais " + polygon.Points.Count);
         TriangleNet.Mesh tmesh = Mesh(reference);
         IEnumerator<Triangle> triangleEnumerator = tmesh.Triangles.GetEnumerator();
+
 
         for (int i = 0; i < tmesh.Triangles.Count; i++) {
             if (!triangleEnumerator.MoveNext()) {
@@ -246,7 +284,7 @@ public class GmlPolygon {
         //mesh.RecalculateNormals();
 
         MeshFilter mshFilter = side.AddComponent<MeshFilter>();
-        //side.AddComponent<MeshRenderer>().material.color = polyColor;
+        side.AddComponent<MeshRenderer>().material.color = polyColor;
         mshFilter.mesh = mesh;
 
         return side;
@@ -263,7 +301,7 @@ public class GmlPolygon {
         //polygon.Points = City.ToLocal(polygon.Points, refpoiint);
         Tuple<List<Vertex>, List<float>> info = City.ToLocal(polygon.Points, elevation, refpoiint);
         this.elevation = info.Item2;
-
+        //Debug.Log(" gmlPoly mesh " + polygon.Points.Count);
 
         return (TriangleNet.Mesh) new Dwyer().Triangulate(info.Item1, new Configuration());
     }

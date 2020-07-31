@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TriangleNet.Geometry;
+using UnityEditor;
 
 
 public class City : MonoBehaviour {
@@ -16,10 +17,7 @@ public class City : MonoBehaviour {
     public string file = "LYON_6EME_PONT_2015";
     XDocument cityData;
 
-    //gml:boundedBy
-    Bounds bounding;
 
-    public float downScale = 1000f;
     Vector3 vScale;
 
     List<Building> buildings = new List<Building>();
@@ -53,14 +51,16 @@ public class City : MonoBehaviour {
             if (cityObject.Descendants(bldg + "Building").Any()) {
                 Building temp = new Building();
                 foreach (XElement poly in cityObject.Descendants(gml + "posList")) {
+                    //Debug.Log(poly.)
                     findRef.Add(new GmlPolygon(poly));
                     temp.polys.Add(new GmlPolygon(poly, Color.blue));
                 }
                 buildings.Add(temp);
             } else {
                 foreach (XElement poly in cityObject.Descendants(gml + "posList")) {
-                    findRef.Add(new GmlPolygon(poly));
-                    all.Add(new GmlPolygon(poly));
+                    GmlPolygon tkt = new GmlPolygon(poly);
+                    findRef.Add(tkt);
+                    all.Add(tkt);
                 }
             }
         }
@@ -69,7 +69,7 @@ public class City : MonoBehaviour {
         Vector3 refpoint = ReferencePoint(findRef);
         tktrefpoint = refpoint;
         buildings = MoveToLocal(buildings, refpoint);
-        all = ToLocal(all, refpoint);
+        //all = ToLocal(all, refpoint);
 
         //Mettre ca dans une un seul GameObject qui combine les instances
 
@@ -82,9 +82,10 @@ public class City : MonoBehaviour {
             //}
             foreach (Building bl in buildings) {
                 //MeshFilter[] meshes = bl.buildOptiTest(transform, tktrefpoint);
-                //MeshFilter[] meshes = bl.buildOpti(transform);
+                MeshFilter[] meshes = bl.buildOpti(transform);
+                //MeshFilter[] meshes = bl.buildOptiConvexHull(transform);
                 //MeshFilter[] meshes = bl.buildOptiPTM(transform);
-                MeshFilter[] meshes = bl.buildOptiMI(transform);
+                //MeshFilter[] meshes = bl.buildOptiMI(transform);
                 CombineMeshes(meshes, Color.blue).transform.parent = gameObject.transform;
             }
         } else {
@@ -94,14 +95,39 @@ public class City : MonoBehaviour {
         }
 
 
+
+
         //Combiner les meshes du terrain aussi
-        foreach (GmlPolygon poly in all) {
-            GameObject side = poly.Side();
-            side.transform.parent = this.gameObject.transform;
-        }
+
+        MeshFilter[] Nobuilding = GetMeshes(all, transform, tktrefpoint);
+        CombineMeshes(Nobuilding, Color.black).transform.parent = gameObject.transform;
+
+        //foreach (GmlPolygon poly in all) {
+
+        //    GameObject side = poly.SideOpti();
+        //    side.transform.parent = this.gameObject.transform;
+        //}
         gameObject.transform.Rotate(-90, 0, 0);
     }
 
+    public MeshFilter[] GetMeshes( List<GmlPolygon> polys, Transform parent, Vector3 reference) {
+        //GameObject build = new GameObject("building");
+        //build.isStatic = true;
+
+
+        MeshFilter[] filters = new MeshFilter[polys.Count];
+
+        for (int i = 0; i < polys.Count; i++) {
+            GameObject temp = polys[i].MeshFromTusais(reference);
+            temp.transform.parent = parent;
+
+            filters[i] = temp.GetComponent<MeshFilter>();
+        }
+
+
+
+        return filters;
+    }
 
     private GameObject CombineMeshes(MeshFilter[] meshes,Color color) {
         GameObject combined = new GameObject("Combined Meshes");
@@ -212,26 +238,23 @@ public class City : MonoBehaviour {
         return bld;
     }
 
-   
 
 
-    //private void OnDrawGizmos() {
-    //    Gizmos.color = Color.blue;
-    //    if (buildings != null && buildings.Count > 0 && tktrefpoint != null) {
 
-    //        foreach (Building bld in buildings) {
-    //            foreach (GmlPolygon polygon in bld.polys) {
-    //                TriangleNet.Mesh mesh = polygon.Mesh(tktrefpoint);
-    //                foreach (Edge item in mesh.Edges) {
-    //                    Vertex v0 = mesh.vertices[item.P0];
-    //                    Vertex v1 = mesh.vertices[item.P1];
-    //                    Vector3 p0 = new Vector3((float)v0.x,0f , (float)v0.y);
-    //                    Vector3 p1 = new Vector3((float)v1.x, 0f, (float)v0.y);
-    //                    Gizmos.DrawLine(p0, p1);
-    //                }
-    //            }
+    private void OnDrawGizmos() {
+        Handles.color = Color.black;
+        Gizmos.color = Color.blue;
+        if (buildings != null && buildings.Count > 0 && tktrefpoint != null) {
 
-    //        }
-    //    }
-    //}
+            foreach (Building bld in buildings) {
+                foreach (GmlPolygon polygon in bld.polys) {
+                    //Gizmos.color = UnityEngine.Random.ColorHSV();
+                    foreach (Vector3 item in polygon.points) {
+                        Gizmos.DrawWireSphere(item, 0.5f);
+                    }
+                }
+
+            }
+        }
+    }
 }
